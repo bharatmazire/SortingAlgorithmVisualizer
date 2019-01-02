@@ -2,6 +2,7 @@
 #include"SortingAlgorithmVisualizer.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+BOOL CALLBACK MyDlgProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -26,7 +27,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	wndclass.style = CS_HREDRAW | CS_VREDRAW;
 
 	if (!RegisterClassEx(&wndclass))
-		MSGBOX("Register Class Fails ")
+		MSGBOX("Register Class Fails ");
 
 	hwnd = CreateWindow(szAppName, TEXT("Sorting Algorithm Visualizer"), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
 	
@@ -44,17 +45,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
+	// declaration of variables
+	// HDC hdc;
+	// PAINTSTRUCT ps;
+	// static RECT rc;
+	// GetClientRect(hwnd, &rc);
+	// HBRUSH hBrush, hBrush1;
+
+
 	switch (iMsg)
 	{
 	case WM_CREATE:
+		
+		break;
+	case WM_PAINT:
+		
 		break;
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
 		case VK_SPACE:
+			MSGBOX("PRESS SPACE TO START");
+			if (DialogBox((HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE), MAKEINTRESOURCE(SORTDLG), hwnd, (DLGPROC)MyDlgProc) == IDOK)
+			{
+				MSGBOX("SUCCESS");
+			}
+			else
+			{
+				MSGBOX("FAILURE");
+			}
 			break;
 		case VK_ESCAPE:
-			MSGBOX("Distroying Window !!")
+			MSGBOX("Distroying Window !!");
 			DestroyWindow(hwnd);
 			break;
 		}
@@ -64,4 +86,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return(DefWindowProc(hwnd, iMsg, wParam, lParam));
+}
+
+BOOL CALLBACK MyDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (iMsg)
+	{
+	case WM_COMMAND:
+		case IDOK:
+			MSGBOX("OK");
+			return TRUE;
+		case IDCANCEL:
+			EndDialog(hDlg, wParam);
+			return TRUE;
+	break;
+	}
+	return FALSE;
 }
